@@ -38,17 +38,33 @@ int main(void){
 	return 0;
 
 }
-
+//search all data
 int look(sqlite3* db,char* err_msg,int rc){
 
 	char* query = ("select * form menu");
 	rc = sqlite3_exec(db,query,callback,0,&err_msg);
 	return 0;
 }
+//insert date
+int insert_data(sqlite3_stmt* res, sqlite3* db, char* err_msg, int rc){
+	char* query = "insert into menu values(?,?,?,?)";
+	if(rc != SQLITE_OK)
+	{
+		perror(sqlite);
+		sqlite3_close(db);
+		return 1;
+	}
+	rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
+	if ( rc == SQLITE_OK) 
+		
 
-int insert_data(sqlite3* db, char* err_msg, int rc){
-	
+
 }
+//delete data
+int delete_data(){
+
+}
+// 
 
 int callback(void* NotUsed, int argc, char** argv, char** azColName)
 {	
