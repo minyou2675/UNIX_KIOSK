@@ -1,6 +1,9 @@
 #include <sqlite3.h>
 #include <stdio.h>
 
+
+
+//gcc -o db db.c -lsqlite3 -std=c99
 int main(void){
 	char* menu_name;
 	char* err_msg = 0;
@@ -24,6 +27,28 @@ int main(void){
 		sqlite3_close(db);
 		exit(1);
 	}
+	printf("SELECT NUMBER\n");
+	printf("1\n2\n3\n4\n5");
+	int number;
+	scanf("%d",&number);
+	//select
+	switch(number){
+		case 1 : 
+			printf("DATA INSERT");
+			break;
+		case 2 :
+			printf("DATA DELETE");
+			break;
+		case 3 :
+			printf("DATA MODIFY");
+			break;
+		case 4 :
+			printf("Look up");
+			break;
+		case 5 :
+			break; 
+	
+	}	
 	//Looking up
 	char* look = ("select * from menu;");
 	rc = sqlite3_exec(db,look,callback,0&err_msg);
@@ -60,8 +85,15 @@ int insert_data(sqlite3_stmt* res, sqlite3* db, char* err_msg, int rc){
 
 
 }
+//modify data
+
+
+
 //delete data
-int delete_data(){
+int delete_data(int argc, char** argv){
+
+	char* query = "delete 
+
 
 }
 // 
