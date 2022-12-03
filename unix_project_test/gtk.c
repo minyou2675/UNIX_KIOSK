@@ -38,7 +38,7 @@ void lookup(){
 	//db
 	int rc = sqlite3_open("test.db",&db);
 	char* query = "SELECT * FROM MENU;";
-	rc = sqlite3_exec(db,query,callback,store,&err_msg);
+	rc = sqlite3_exec(db,query,callback,0,&err_msg);
 	if(rc != SQLITE_OK){
 		perror("db");
 		sqlite3_free(err_msg);
