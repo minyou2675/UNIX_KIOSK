@@ -20,7 +20,7 @@ void greet(GtkWidget* widget, gpointer data)
 	g_print("Welcome to GTK\n");
 	g_print("%s clicked %d times\n",(char*)data, ++counter);
 }
-void lookup(){
+void lookup(GtkWidget* widget){
 	GtkListStore* store;
 	GtkWidget* list, *window2,*vbox,*label;
 	GtkCellRenderer *renderer;
@@ -47,6 +47,7 @@ void lookup(){
 		sqlite3_close(db);
 		exit(1);
 	}
+	sqlite3_close(db); 
 
 	//create list_view
 	list = gtk_tree_view_new();
@@ -60,6 +61,8 @@ void lookup(){
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes("PRICE",renderer,"text",LIST_PRICE,NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	//setup the ui
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(list), FALSE);
@@ -101,16 +104,16 @@ int main(int argc, char* argv[]){
 		sqlite3_close(db);
 		return 1;
 	}
-	char *sql = "DROP TABLE IF EXISTS MENU;"
-		    "CREATE TABLE MENU(id int, name varchar(20), price int);"
+//	char *sql = "DROP TABLE IF EXISTS MENU;"
+//		    "CREATE TABLE MENU(id int, name varchar(20), price int);"
 		    "INSERT INTO MENU VALUES(1,'pasta',5000);"
 		    "INSERT INTO MENU VALUES(2,'pizza',10000);";
-	rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
-	if(rc != SQLITE_OK){
-		perror("exec");
-		sqlite3_close(db);
-		return 1;
-	}
+//	rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+//	if(rc != SQLITE_OK){
+//		perror("exec");
+//		sqlite3_close(db);
+//		return 1;
+//	}
 	sqlite3_close(db); 
 	//LABELING PART
 		//WINDOW
