@@ -3,6 +3,9 @@
 #include <stdio.h>
 //gcc -o gtk gtk.c `pkg-config --libs --clfags gtk+-2.0`
 int callback(void *,int, char **, char **);
+
+GtkWidget *entry0,*entry1,entry2,entry3;
+const gchar *entry0_text,*entry1_text,*entry2_text,*entry3_text;
 enum{
  LIST_ID,
  LIST_NAME,
@@ -93,7 +96,41 @@ void lookup(GtkWidget* widget){
 	
 	
 }
-void insert_data(){
+void insert_data(GtkWidget* widget){
+	GtkWidget *window;
+	GtkWidget *grid;
+	
+	GtkWidget *button;
+	sqlite3* db;
+	int rc;
+	char* sql;
+
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title(GTK_WINDOW(window),"Insert data");
+	gtk_window_set_default_size(GTK_WINDOW(window),512,512);
+	gtk_window_set_position(GTK_WINDOW(winodow),GTK_WIN_POS_CENTER);
+
+	grid = gtk_grid_new();
+	gtk_container_add (GTK_CONTAINER(window), GTK_WIDGET(grid));
+
+	entry0 = gtk_entry_new();
+	gtk_grid_attach (GTK_GRID(grid), entry0, 0, 0, 1, 1);
+
+	entry1 = gtk_entry_new();
+	gtk_grid_attach (GTK_GRID(grid), entry1, 1, 0, 1, 1);
+
+	entry2 = gtk_entry_new();
+	gtk_grid_attach (GTK_GRID(grid), entry2, 2, 0, 1, 1); 
+
+	entry3 = gtk_entry_new();
+	gtk_grid_attach (GTK_GRID(grid), entry3, 3, 0, 1, 1);
+
+	button = gtk_button_new_with_label("INSERT");
+	gtk_grid_attach (GTK_GRID(grid), button, 2, 1, 3, 3,);
+	g_signal_connect(button,"clicked",G_CALLBACK(insert_callback),NULL);	
+	//db
+	sqlite3_open("test.db",&db);
+	gtk_widget_show_all(window);
 	
 }
 void delete_data(){
@@ -151,7 +188,8 @@ int main(int argc, char* argv[]){
 	gtk_widget_set_size_request(button4, 200, 50);
 	//SIGNAL_PART
 	g_signal_connect(window,"delete-event",G_CALLBACK(gtk_main_quit),NULL);
-	g_signal_connect(GTK_OBJECT(button1), "clicked", G_CALLBACK(greet),"button");
+	g_signal_connect(GTK_OBJECT(button1), "clicked",G_CALLBACK(insert_data),"button")
+	g_signal_connect(GTK_OBJECT(button2), "clicked", G_CALLBACK(greet),"button");
 	g_signal_connect(GTK_OBJECT(button4),"clicked", G_CALLBACK(lookup),"button");
 	//CONTAINER PART
 	gtk_container_add(GTK_CONTAINER(window), frame);
@@ -178,4 +216,22 @@ int callback(void* model, int argc, char **argv, char **azColName){
 			LIST_PRICE, argv[2],LIST_EXPIRATION, argv[3],
 			-1);
 	return 0;
+}
+
+static void insert_callback(void){
+
+	entry0_text = gtk_entry_get_text (GTK_ENTRY(entry0));
+	entry1_text = gtk_entry_get_text (GTK_ENTRY(entry1));
+	entry2_text = gtk_entry_get_text (GTK_ENTRY(entry2));
+	entry3_text = gtk_entry_get_text (GTK_ENTRY(entry3));
+	
+	// sqlite3* db;
+	// int rc
+	// rc = sqlite3_open("test.db",&db);
+  g_print ("Entry0 contents: %s\n", entry0_text);
+  g_print ("Entry1 contents: %s\n", entry1_text);
+  g_print ("Entry2 contents: %s\n", entry2_text);
+
+	
+
 }
