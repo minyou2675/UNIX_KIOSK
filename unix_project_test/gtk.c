@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 #include <stdio.h>
 //gcc -o gtk gtk.c `pkg-config --libs --clfags gtk+-2.0`
-int callback(int, char **, char **);
+int callback(void *,int, char **, char **);
 enum{
  LIST_ID,
  LIST_NAME,
@@ -36,9 +36,11 @@ void lookup(){
 	gtk_window_set_position(GTK_WINDOW(window2), GTK_WIN_POS_CENTER);
 	g_signal_connect(window2, "destroy", G_CALLBACK(gtk_main_quit),NULL);
 	//db
+	
+	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 	int rc = sqlite3_open("test.db",&db);
 	char* query = "SELECT * FROM MENU;";
-	rc = sqlite3_exec(db,query,callback,0,&err_msg);
+	rc = sqlite3_exec(db,query,callback,store,&err_msg);
 	if(rc != SQLITE_OK){
 		perror("db");
 		sqlite3_free(err_msg);
@@ -49,7 +51,6 @@ void lookup(){
 	//create list_view
 	list = gtk_tree_view_new();
 	//columns with rendering
-	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes("ID", renderer,"text",LIST_ID,
 			NULL);
@@ -145,16 +146,14 @@ int main(int argc, char* argv[]){
 
 }
 
-int callback(int argc, char **argv, char **azColName){
+int callback(void* model, int argc, char **argv, char **azColName){
 	GtkTreeIter iter;
-	GtkListStore * list_store;
-	list_store = gtk_list_store_new(LIST_ID,LIST_NAME,LIST_PRICE,N_COLUMNS);
 	for(int i = 0; i < argc; i++){
 		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
 	}
 	printf("\n");
-	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, LIST_ID, argv[0],
+	gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+	gtk_list_store_set(GTK_LIST_STORE(model), &iter, LIST_ID, argv[0],
 			LIST_NAME, argv[1],
 			LIST_PRICE, argv[2],
 			-1);
