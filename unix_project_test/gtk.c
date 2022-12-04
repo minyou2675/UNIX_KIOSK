@@ -7,6 +7,7 @@ enum{
  LIST_ID,
  LIST_NAME,
  LIST_PRICE,
+ LIST_EXPIRATION,
  N_COLUMNS
 };
 
@@ -37,7 +38,7 @@ void lookup(GtkWidget* widget){
 	g_signal_connect(window2, "destroy", G_CALLBACK(gtk_main_quit),NULL);
 	//db
 	
-	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,G_TYPE_STRING);
 	int rc = sqlite3_open("test.db",&db);
 	char* query = "SELECT * FROM MENU;";
 	rc = sqlite3_exec(db,query,callback,store,&err_msg);
@@ -62,6 +63,11 @@ void lookup(GtkWidget* widget){
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes("PRICE",renderer,"text",LIST_PRICE,NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+	
+	renderer = gtk_cell_render_text_new();
+	column = gtk_tree_view_column_new_with_attributes("EXPIRE",renderer,"text",LIST_EXPIRATION,NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
 	gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	//setup the ui
@@ -69,6 +75,16 @@ void lookup(GtkWidget* widget){
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(vbox), list, TRUE, TRUE, 5);
 	label = gtk_label_new("");
+	//scroll view
+	//GtkWidget *scrollview = gtk_scrolled_window_new(NULL,NULL);
+	//gtk_container_add (GTK_CONTAINER (scrollview), view);
+	//gkt_widget_set_hexpand(scrollview, TRUE);
+	///gtk_widget_set_vexpand(scrollview, TRUE);
+	GtkWidget *scrollview;
+	scrollview = gtk_scrolled_window_new(NULL, NULL);
+	//scrollview-.add_with_viewport(vbox);
+
+
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(window2), vbox);
 	
@@ -78,6 +94,7 @@ void lookup(GtkWidget* widget){
 	
 }
 void insert_data(){
+	
 }
 void delete_data(){
 }
@@ -158,7 +175,7 @@ int callback(void* model, int argc, char **argv, char **azColName){
 	gtk_list_store_append(GTK_LIST_STORE(model), &iter);
 	gtk_list_store_set(GTK_LIST_STORE(model), &iter, LIST_ID, argv[0],
 			LIST_NAME, argv[1],
-			LIST_PRICE, argv[2],
+			LIST_PRICE, argv[2],LIST_EXPIRATION, argv[3],
 			-1);
 	return 0;
 }
