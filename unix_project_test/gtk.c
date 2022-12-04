@@ -48,8 +48,8 @@ void lookup(GtkWidget* widget){
 	
 	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,G_TYPE_STRING);
 
-	char* query = "SELECT * FROM MENU;";
-	rc = sqlite3_exec(db,query,callback,store,&err_msg);
+	char* sql = "SELECT * FROM MENU;";
+	rc = sqlite3_exec(db,sql,callback,store,&err_msg);
 	if(rc != SQLITE_OK){
 		perror("db");
 		sqlite3_free(err_msg);
@@ -233,9 +233,17 @@ int callback(void* model, int argc, char **argv, char **azColName){
 	entry2_text = gtk_entry_get_text (GTK_ENTRY(entry2));
 	entry3_text = gtk_entry_get_text (GTK_ENTRY(entry3));
 	
-	sql = "INSERT INTO MENU VALUES(?,?,?,?);
+	sql = "INSERT INTO MENU VALUES(?,?,?,?);";
 	
 	rc = sqlite3_prepare_v2(db,sql,-1,&res,0);
+
+	if (rc == SQLITE3_OK)
+	{
+		sqlite3_bind_int(res,1,(int)entry0_text);
+		sqlite3_bind_int(res,2,(int)entry1_text);
+		sqlite3_bind_int(res,3,(int)entry2_text);
+		sqlite3_bind_int(res,4,(int)entry3_text);
+	}
 	if(rc != SQLITE3_OK){
 		perror("insert");
 		sqlite3_closee(db);
