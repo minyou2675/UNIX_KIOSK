@@ -5,7 +5,7 @@
 int callback(void *,int, char **, char **);
 void insert_callback(void);
 
-GtkWidget *entry0,*entry1,*entry2,entry3;
+GtkWidget *entry0,*entry1,*entry2,*entry3;
 const gchar *entry0_text,*entry1_text,*entry2_text,*entry3_text;
 enum{
  LIST_ID,
@@ -68,7 +68,7 @@ void lookup(GtkWidget* widget){
 	column = gtk_tree_view_column_new_with_attributes("PRICE",renderer,"text",LIST_PRICE,NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 	
-	renderer = gtk_cell_render_text_new();
+	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes("EXPIRE",renderer,"text",LIST_EXPIRATION,NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 
@@ -76,7 +76,7 @@ void lookup(GtkWidget* widget){
 	g_object_unref(store);
 	//setup the ui
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(list), FALSE);
-	vbox = gtk_vbox_new(FALSE,0);
+	vbox = gtk_box_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(vbox), list, TRUE, TRUE, 5);
 	label = gtk_label_new("");
 	//scroll view
@@ -189,9 +189,9 @@ int main(int argc, char* argv[]){
 	gtk_widget_set_size_request(button4, 200, 50);
 	//SIGNAL_PART
 	g_signal_connect(window,"delete-event",G_CALLBACK(gtk_main_quit),NULL);
-	g_signal_connect(GTK_OBJECT(button1), "clicked",G_CALLBACK(insert_data),"button")
-	g_signal_connect(GTK_OBJECT(button2), "clicked", G_CALLBACK(greet),"button");
-	g_signal_connect(GTK_OBJECT(button4),"clicked", G_CALLBACK(lookup),"button");
+	g_signal_connect(button1, "clicked",G_CALLBACK(insert_data),NULL);
+	g_signal_connect(button2, "clicked", G_CALLBACK(greet),NULL);
+	g_signal_connect(button4,"clicked", G_CALLBACK(lookup),NULL);
 	//CONTAINER PART
 	gtk_container_add(GTK_CONTAINER(window), frame);
 	gtk_fixed_put(GTK_FIXED(frame),button1,50, 20);
@@ -219,7 +219,7 @@ int callback(void* model, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-static void insert_callback(void){
+ void insert_callback(void){
 
 	entry0_text = gtk_entry_get_text (GTK_ENTRY(entry0));
 	entry1_text = gtk_entry_get_text (GTK_ENTRY(entry1));
