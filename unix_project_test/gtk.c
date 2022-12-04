@@ -3,8 +3,9 @@
 #include <stdio.h>
 //gcc -o gtk gtk.c `pkg-config --libs --clfags gtk+-2.0`
 int callback(void *,int, char **, char **);
+void insert_callback(void);
 
-GtkWidget *entry0,*entry1,entry2,entry3;
+GtkWidget *entry0,*entry1,*entry2,entry3;
 const gchar *entry0_text,*entry1_text,*entry2_text,*entry3_text;
 enum{
  LIST_ID,
@@ -108,7 +109,7 @@ void insert_data(GtkWidget* widget){
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window),"Insert data");
 	gtk_window_set_default_size(GTK_WINDOW(window),512,512);
-	gtk_window_set_position(GTK_WINDOW(winodow),GTK_WIN_POS_CENTER);
+	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
 
 	grid = gtk_grid_new();
 	gtk_container_add (GTK_CONTAINER(window), GTK_WIDGET(grid));
@@ -126,7 +127,7 @@ void insert_data(GtkWidget* widget){
 	gtk_grid_attach (GTK_GRID(grid), entry3, 3, 0, 1, 1);
 
 	button = gtk_button_new_with_label("INSERT");
-	gtk_grid_attach (GTK_GRID(grid), button, 2, 1, 3, 3,);
+	gtk_grid_attach (GTK_GRID(grid), button, 2, 1, 3, 3);
 	g_signal_connect(button,"clicked",G_CALLBACK(insert_callback),NULL);	
 	//db
 	sqlite3_open("test.db",&db);
