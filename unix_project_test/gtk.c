@@ -4,6 +4,9 @@
 //gcc -o gtk gtk.c `pkg-config --libs --clfags gtk+-2.0`
 int callback(void *,int, char **, char **);
 void insert_callback(void);
+sqlite3* db;
+char* err_msg = 0;
+int rc = sqlite3_open("test.db",&db);
 
 GtkWidget *entry0,*entry1,*entry2,*entry3;
 const gchar *entry0_text,*entry1_text,*entry2_text,*entry3_text;
@@ -18,6 +21,8 @@ enum{
 static int counter = 0;
 
 void destroy(GtkWidget* widget, gpointer data){
+	sqlite3_free(&err_msg);
+	sqlite3_close(db);
 	gtk_main_quit();
 }
 void greet(GtkWidget* widget, gpointer data)
@@ -31,8 +36,7 @@ void lookup(GtkWidget* widget){
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection* selection;
-	sqlite3* db;
-	char* err_msg = 0;
+	
 	
 	//window 
 	window2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -43,7 +47,7 @@ void lookup(GtkWidget* widget){
 	//db
 	
 	store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,G_TYPE_STRING);
-	int rc = sqlite3_open("test.db",&db);
+
 	char* query = "SELECT * FROM MENU;";
 	rc = sqlite3_exec(db,query,callback,store,&err_msg);
 	if(rc != SQLITE_OK){
@@ -52,7 +56,7 @@ void lookup(GtkWidget* widget){
 		sqlite3_close(db);
 		exit(1);
 	}
-	sqlite3_close(db); 
+	// sqlite3_close(db); 
 
 	//create list_view
 	list = gtk_tree_view_new();
@@ -102,8 +106,8 @@ void insert_data(GtkWidget* widget){
 	GtkWidget *grid;
 	
 	GtkWidget *button;
-	sqlite3* db;
-	int rc;
+	// sqlite3* db;
+	// int rc;
 	char* sql;
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
