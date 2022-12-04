@@ -220,18 +220,27 @@ int callback(void* model, int argc, char **argv, char **azColName){
 }
 
  void insert_callback(void){
+	 
+	 char *sql;
+	 sqlite3_stmt *res;
 
 	entry0_text = gtk_entry_get_text (GTK_ENTRY(entry0));
 	entry1_text = gtk_entry_get_text (GTK_ENTRY(entry1));
 	entry2_text = gtk_entry_get_text (GTK_ENTRY(entry2));
 	entry3_text = gtk_entry_get_text (GTK_ENTRY(entry3));
 	
-	// sqlite3* db;
-	// int rc
-	// rc = sqlite3_open("test.db",&db);
-  g_print ("Entry0 contents: %s\n", entry0_text);
-  g_print ("Entry1 contents: %s\n", entry1_text);
-  g_print ("Entry2 contents: %s\n", entry2_text);
+	sql = "INSERT INTO MENU VALUES(?,?,?,?);
+	
+	rc = sqlite3_prepare_v2(db,sql,-1,&res,0);
+	if(rc != SQLITE3_OK){
+		perror("insert");
+		sqlite3_closee(db);
+		exit(1);
+	}
+		
+ 	 g_print ("Entry0 contents: %s\n", entry0_text);
+	 g_print ("Entry1 contents: %s\n", entry1_text);
+	 g_print ("Entry2 contents: %s\n", entry2_text);
 
 	
 
