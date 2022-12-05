@@ -95,7 +95,8 @@ void lookup(GtkWidget* widget){
 
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(window2), vbox);
-	
+	g_signal_connect(list,"clicked",G_CALLBACK(delete_callback),NULL);
+
 	gtk_widget_show_all(window2);
 	gtk_main();
 	
@@ -138,7 +139,8 @@ void insert_data(GtkWidget* widget){
 	gtk_widget_show_all(window);
 	
 }
-void delete_data(){
+void delete_data(GtkWidget* widget){
+	Gtkwidget* window;
 }
 void modify_data(){
 }
@@ -221,6 +223,31 @@ int callback(void* model, int argc, char **argv, char **azColName){
 			LIST_PRICE, argv[2],LIST_EXPIRATION, argv[3],
 			-1);
 	return 0;
+}
+
+int delete_callback(GtkWidget *widget GdkEvent GdkEvent *event){
+
+	const gint RIGHT_CLICK = 3;
+	if(event->type == GDK_BUTTON_PRESS){
+
+		GdkEventButton *bvent = (GdkEventButton *)event;
+		if(bvent->button = RIGHT_CLICK){
+			gkt_menu_popup(GTK_MENU(widget),NULL,NULL,NULL,NULL,bvent->button,
+			bvent->time);
+			return true;
+		}
+		return false;
+
+	} 
+	// char *sql;
+	// sqlite3_stmt *res;
+
+	// sql = "delete from menu where id = ?;";
+	// rc = sqlite3_prepare_v2(db,sql,-1,&res,0);
+	// if (rc == SQLITE3_OK){
+
+	// 	sqlite3_bind_int(res,1,1);
+	// }
 }
 
  void insert_callback(void){
