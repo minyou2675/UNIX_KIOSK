@@ -7,7 +7,7 @@ void insert_callback(void);
 sqlite3* db;
 char* err_msg = 0;
 int rc = sqlite3_open("test.db",&db);
-
+void delete_callback(GtkWidget* GtkEvent*);
 GtkWidget *entry0,*entry1,*entry2,*entry3;
 const gchar *entry0_text,*entry1_text,*entry2_text,*entry3_text;
 enum{
@@ -59,7 +59,7 @@ void lookup(GtkWidget* widget){
 	// sqlite3_close(db); 
 
 	//create list_view
-	list = gtk_tree_view_new();
+list = gtk_tree_view_new();
 	//columns with rendering
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes("ID", renderer,"text",LIST_ID,
@@ -140,7 +140,6 @@ void insert_data(GtkWidget* widget){
 	
 }
 void delete_data(GtkWidget* widget){
-	Gtkwidget* window;
 }
 void modify_data(){
 }
@@ -225,18 +224,18 @@ int callback(void* model, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-int delete_callback(GtkWidget *widget GdkEvent GdkEvent *event){
+int delete_callback(GtkWidget *widget ,GdkEvent *event){
 
 	const gint RIGHT_CLICK = 3;
 	if(event->type == GDK_BUTTON_PRESS){
 
 		GdkEventButton *bvent = (GdkEventButton *)event;
 		if(bvent->button = RIGHT_CLICK){
-			gkt_menu_popup(GTK_MENU(widget),NULL,NULL,NULL,NULL,bvent->button,
+			gtk_menu_popup(GTK_MENU(widget),NULL,NULL,NULL,NULL,bvent->button,
 			bvent->time);
-			return true;
+			return 0;
 		}
-		return false;
+		return fclose;
 
 	} 
 	// char *sql;
@@ -264,16 +263,16 @@ int delete_callback(GtkWidget *widget GdkEvent GdkEvent *event){
 	
 	rc = sqlite3_prepare_v2(db,sql,-1,&res,0);
 
-	if (rc == SQLITE3_OK)
+	if (rc == SQLITE_OK)
 	{
 		sqlite3_bind_int(res,1,(int)entry0_text);
 		sqlite3_bind_int(res,2,(int)entry1_text);
 		sqlite3_bind_int(res,3,(int)entry2_text);
 		sqlite3_bind_int(res,4,(int)entry3_text);
 	}
-	if(rc != SQLITE3_OK){
+	if(rc != SQLITE_OK){
 		perror("insert");
-		sqlite3_closee(db);
+		sqlite3_close(db);
 		exit(1);
 	}
 		
