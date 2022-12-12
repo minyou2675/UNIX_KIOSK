@@ -1,12 +1,14 @@
-// #include <sys/socket.h>
-// #include <sys/un.h>
-// #include <unistd.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <string.h>
 
-void Read(void*, int, char**, char** );
+#define PORTNUM 9000
+
+int Read(void*, int, char**, char** );
 
 //gcc -o db db.c -lsqlite3 -std=c99
 int main(void){
@@ -33,7 +35,7 @@ int main(void){
 	char *sql = "DROP TABLE IF EXISTS menu;"
 				"CREATE TABLE menu(id int primary key, name varchar(2),price int, img text,);"
 				"insert into menu(name,price,img) values ('pizza','25000',); ";
-	// rc = sqlite3_exec(db,sql,0,0,&err_msg);
+	rc = sqlite3_exec(db,sql,0,0,&err_msg);
 
 	sql = "select * from menu;";
 
@@ -48,7 +50,7 @@ int main(void){
 }
 //search all data
 
-void Read(void* NotUsed, int argc, char** argv, char** azColName)
+int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
 	NotUsed = 0;
 	
@@ -60,7 +62,7 @@ void Read(void* NotUsed, int argc, char** argv, char** azColName)
 	}
 	printf("\n"); 
 
-
+	return 0;
 
 	
 }
