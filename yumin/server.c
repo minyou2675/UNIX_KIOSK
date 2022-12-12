@@ -43,7 +43,10 @@ int main(){
         //     //accept 할 시 read data 실행
         // }
         // //영수증 받기
-        int recv(int ns, void *buf, size_t len, int flags);
+        if(recv(int ns, void *buf, size_t len, int flags) == -1){
+            perror("receive");
+            exit(1);
+        };
         
         sprintf(buf, "Your IP address is %s", inet_ntoa(cli.sin_addr));
         if(send(ns, buf, strlen(buf) + 1, 0) == -1){
