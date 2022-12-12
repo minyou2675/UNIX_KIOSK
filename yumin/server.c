@@ -43,7 +43,7 @@ int main(){
         //     //accept 할 시 read data 실행
         // }
         // //영수증 받기
-        if((recv(int ns, void *buf, size_t len, int flags))== -1){
+        if((recv(ns,*buf,sizeof(buf),0))== -1){
             perror("receive");
             exit(1);
         };
