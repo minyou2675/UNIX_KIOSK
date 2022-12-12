@@ -10,6 +10,19 @@
 
 int Read(void*, int, char**, char** );
 
+void read_sig_handler(sqlite3* db){
+	char* err_msg = 0;
+	char* sql = "select * from menu where available = 1;";
+	sqlite3_exec(db,sql,Read,0,&err_msg);
+
+}
+
+void send_sig_hanlder(){
+	char* err_msg = 0;
+	sqlite3_exec(db,sql,Recep,0,&err_msg);
+
+}
+
 //gcc -o db db.c -lsqlite3 -std=c99
 int main(void){
 	char* err_msg = 0;
@@ -33,8 +46,8 @@ int main(void){
 	}
 	//CREATE TABLE
 	char *sql = "DROP TABLE IF EXISTS menu;"
-				"CREATE TABLE menu(id int primary key, name varchar(2),price int, img text,);"
-				"insert into menu(name,price,img) values ('pizza','25000',); ";
+				"CREATE TABLE menu(id int primary key, name varchar(2),price int,available int, img text,);"
+				"insert into menu(name,price,img) values ('pizza','25000',1,'aaa');";
 	rc = sqlite3_exec(db,sql,0,0,&err_msg);
 
 	sql = "select * from menu;";
@@ -65,5 +78,11 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 	return 0;
 
 	
+}
+
+int Recp(void* NotUsed, int argc, char** argv, char** azColname){
+
+
+	return 0;
 }
 
