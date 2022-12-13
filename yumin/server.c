@@ -41,6 +41,7 @@ int main(){
         }
         // else{
         //     //accept 할 시 read data 실행
+        //  read();
         // }
         // //영수증 받기
         if((recv(ns,*buf,sizeof(buf),0))== -1){
