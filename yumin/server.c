@@ -10,17 +10,29 @@
 
 int main(){
         char buf[256];
-        struct DB dbs;
+        
         struct sockaddr_in sin, cli;
         int sd, ns, clientlen = sizeof(cli);
 
-	dbs.rc = sqlite3_open(test.db,dbs->db);
-        if (dbs.rc != SQLITE_OK)
-	{
+        char* err_msg = 0;
+	    sqlite3* db;
+	    // scanf("%s",menu_name);
+	    int rc = sqlite3_open("test.db", &db);
+	    sqlite3_stmt* res;
+
+	    if (rc != SQLITE_OK)
+	    {
 		perror("DB");
 		sqlite3_close(db);
 		exit(1);
 		}
+	    rc = sqlite3_prepare_v2(db,"SELECT SQLITE_VERSION()",-1,&res,0);
+	    if (rc != SQLITE_OK)
+	    {
+		perror("DB");
+		sqlite3_close(db);
+		exit(1);
+        }
 
         if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
             perror("socket");
@@ -65,6 +77,9 @@ int main(){
             perror("send");
             exit(1);
         }
+        else{
+            break;
+        }
         }
         //buf에 있는 내용을 DB에 추가 + PRINTF 로 내역 띄우기
 
@@ -72,11 +87,10 @@ int main(){
         //sql = create table receipt(name varchar(20),num int,income int,delivery int,FOREIGN KEY REFERENCES ON 
         //  MENU(NAME) ON UPDATE CASCADE);
         
-
+        free(err_msg);
+	    sqlite3_close(db);
         close(ns);
         close(sd);
-
-	
 
 
 }
