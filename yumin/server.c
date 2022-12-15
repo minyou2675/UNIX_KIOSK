@@ -1,4 +1,5 @@
 #include <sys/socket.h>
+#include <sqlite3.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -62,7 +63,7 @@ int main(){
         }
         else{
                char* sql = "select * from menu where available = 1;";
-            	sqlite3_exec(dbs.db,sql,Read,0,&err_msg);
+            	sqlite3_exec(db,sql,Read,0,&err_msg);
         //     //accept 할 시 read data 실행
          
         }
