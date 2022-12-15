@@ -1,17 +1,5 @@
-#include <sqlite3.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-
-
-int Read(void*, int, char**, char** );
-
-void read_sig_handler(sqlite3* db){
-	char* err_msg = 0;
-	char* sql = "select * from menu where available = 1;";
-	sqlite3_exec(db,sql,Read,0,&err_msg);
-
-}
 
 // void send_sig_hanlder(){
 // 	char* err_msg = 0;
@@ -19,15 +7,8 @@ void read_sig_handler(sqlite3* db){
 
 // }
 
-typedef struct {
 
    
-    sqlite3* db;
-    int rc;
-    sqlite3_stmt* res;
-    
-} DB;
-
 //search all data
 
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
