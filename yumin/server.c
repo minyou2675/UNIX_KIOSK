@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include  "db.h"
 
 #define PORTNUM 9000
 
