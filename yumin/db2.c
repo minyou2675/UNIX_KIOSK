@@ -15,15 +15,15 @@ void read_sig_handler(sqlite3* db){
 
 // void send_sig_hanlder(){
 // 	char* err_msg = 0;
-// 	sqlite3_exec(db,sql,Recep,0,&err_msg);
+//	sqlite3_exec(db,sql,Recep,0,&err_msg);
 
 // }
 
 typedef struct {
 
-    char* err_msg = 0;
+   
     sqlite3* db;
-    int rc = sqlite3_open("test.db",&db);
+    int rc;
     sqlite3_stmt* res;
     
 } DB;

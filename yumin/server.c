@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "db2.h"
 
 #define PORTNUM 9000
 
@@ -14,6 +13,8 @@ int main(){
         struct DB dbs;
         struct sockaddr_in sin, cli;
         int sd, ns, clientlen = sizeof(cli);
+
+	dbs.rc = sqlite3_open(test.db,dbs->db);
         if (dbs.rc != SQLITE_OK)
 	{
 		perror("DB");
