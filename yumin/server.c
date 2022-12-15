@@ -5,13 +5,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "db2.h"
 
 #define PORTNUM 9000
 
 int main(){
         char buf[256];
+        struct DB dbs;
         struct sockaddr_in sin, cli;
         int sd, ns, clientlen = sizeof(cli);
+        if (dbs.rc != SQLITE_OK)
+	{
+		perror("DB");
+		sqlite3_close(db);
+		exit(1);
+		}
 
         if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
             perror("socket");
@@ -39,10 +47,12 @@ int main(){
             perror("accept");
             exit(1);
         }
-        // else{
+        else{
+               char* sql = "select * from menu where available = 1;";
+            	sqlite3_exec(dbs.db,sql,Read,0,&err_msg);
         //     //accept 할 시 read data 실행
-        //  read();
-        // }
+         
+        }
         // //영수증 받기
         if((recv(ns,*buf,sizeof(buf),0))== -1){
             perror("receive");
