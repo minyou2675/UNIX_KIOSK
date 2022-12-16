@@ -28,13 +28,6 @@ int main(){
 		sqlite3_close(db);
 		exit(1);
 		}
-	    rc = sqlite3_prepare_v2(db,"SELECT SQLITE_VERSION()",-1,&res,0);
-	    if (rc != SQLITE_OK)
-	    {
-		perror("DB");
-		sqlite3_close(db);
-		exit(1);
-        }
 
         if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
             perror("socket");

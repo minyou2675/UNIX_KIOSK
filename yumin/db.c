@@ -69,16 +69,30 @@ int main(void){
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
 
+	int fd;
+
 	NotUsed = 0;
-    
-    for (int i = 0; i < argc; i++)
-    {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-    }
-    
-    printf("\n");
-    
-    return 0;
+	char buf[1024];
+	for(int i = 0; i < 2; i++){
+		printf("columns %s \n",azColName[i]);
+		strcat(buf,azColName[i]);
+	}
+	strcat(buf,"\n");
+	
+	for (int i = 0; i < argc; i++)
+	{
+	
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : NULL);
+		strcat(buf, argv[i]);
+		
+
+	}
+	puts(buf);
+	printf("\n"); 
+	
+
+	return 0;
+
 	
 }
 
