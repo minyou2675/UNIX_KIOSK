@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include  "db2.h"
+#include  "order.h"
 #include <sys/msg.h>
 struct message{
     long type;
@@ -19,7 +19,7 @@ int message_queue_id = 12345;
 
 int main(){
     struct msg msg;
-    
+
 	char buf[1024];
         int fd1[2];
     char* sql = "select name,price from menu;";
