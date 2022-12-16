@@ -58,7 +58,7 @@ int Receipt(sqlite3 *db,int num,char *text){
         return 1;
 
     }
-    rc = sqlite3_bind_text(res,1,text,-1,SQLITE_STATIC);
+    rc = sqlite3_bind_text(res,1,text);
     if( rc != SQLITE_OK){
         return 1;
     }
@@ -72,7 +72,7 @@ int Receipt(sqlite3 *db,int num,char *text){
     }
     sqlite3_finalize(res);
 
-    sql = "INSERT INTO RECEIPT(name,num,cost) values(?,?,?);"
+    sql = "INSERT INTO RECEIPT(name,num,cost) values(?,?,?);";
     rc = sqlite3_prepare_v2(db,sql,-1,&res,NULL);
     if(rc != SQLITE_OK){
         return 1;
@@ -81,11 +81,11 @@ int Receipt(sqlite3 *db,int num,char *text){
     if(rc != SQLITE_OK){
         return 1;
     }
-    rc = sqlite3_bind_int(res,2,num,-1,SQLITE_STATIC);
+    rc = sqlite3_bind_int(res,2,num);
     if( rc != SQLITE_OK){
         return 1;
     }
-    rc = sqlite3_bind_int(res,3,cost,-1,SQLITE_STATIC);
+    rc = sqlite3_bind_int(res,3,cost);
     if( rc != SQLITE_OK){
         return 1;
     }
