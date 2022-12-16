@@ -187,7 +187,7 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
     
      
 }
-
+//정보수신용, 현재 사용되지 않음
 void refreshDataArray()
 {
     int len;
@@ -200,7 +200,7 @@ void refreshDataArray()
    // char* np_next_token;
     
     len = msgrcv(msgid, &inmsg, 10, 0, 0);
-    g_print("rcv = %s\n", inmsg.mtext, len);
+    g_print("rcv = %s\n", inmsg.mtext);
     
     
 /////////get data in format
@@ -282,39 +282,6 @@ int main(int argc, char *argv[]) {
 //리스트에 아이템 추가 과정(임시)
   init_list(list);
   add_to_list(list, pasta.name, &pasta);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
-  add_to_list(list, pizza.name, &pizza);
   add_to_list(list, pizza.name, &pizza);
  // add_to_list(list, pasta.name);
   
