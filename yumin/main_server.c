@@ -14,6 +14,7 @@ int main(){
     char* err_msg = 0;
     sqlite3* db;
     
+    
     // scanf("%s",menu_name);
     int rc = sqlite3_open("menu.db", &db);
 
