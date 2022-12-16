@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include  "db.h"
+#include  "db2.h"
 
 #define PORTNUM 9000
 
@@ -43,7 +43,7 @@ int main(){
         memset((char *)&sin, '\0', sizeof(sin));
         sin.sin_family = AF_INET;
         sin.sin_port = htons(PORTNUM);
-        sin.sin_addr.s_addr = inet_addr("54.180.1.233");
+        sin.sin_addr.s_addr = inet_addr("172.31.39.29");
 
         if(bind(sd, (struct sockaddr *)&sin, sizeof(sin))){
             perror("bind");
