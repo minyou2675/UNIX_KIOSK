@@ -6,14 +6,27 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include  "db2.h"
+#include <sys/msg.h>
+struct message{
+    long type;
+    char buf[BUFSIZ];
+
+} msg;
+
+
+int message_queue_id = 12345;
+
 
 int main(){
+    struct msg msg;
+    
 	char buf[1024];
         int fd1[2];
     char* sql = "select name,price from menu;";
     char* err_msg = 0;
     sqlite3* db;
     
+
     
     // scanf("%s",menu_name);
     int rc = sqlite3_open("menu.db", &db);
@@ -45,23 +58,14 @@ if((read(fd2,buf,sizeof(buf))) < 0){
         perror("read");
         exit(1);
     }
+
+strcpy(msg.buf,buf);
+if(msgsnd(message_queue_id, &msg, sizeof(msg), 0) == -1){
+    perror("msgsnd");
+    exit(1);
+}
 close(fd2);
-puts("read fd2");
 
-if(mkfifo("menu_pipe",0666) == -1){
-        perror("mkfifo");
-        exit(1);
-    }
-
-if((fd3 = open("menu_pipe",O_RDWR)) == -1){
-        perror("open2");
-        exit(1);
-    }
-puts("open menu_pipe");
-if((write(fd3,buf,strlen(buf))) < 0 ){
-        perror("read");
-        exit(1);
-    } 
 
 printf("exit\n");
 sleep(10000);    
