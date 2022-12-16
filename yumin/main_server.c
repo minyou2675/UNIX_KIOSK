@@ -63,7 +63,7 @@ if((write(fd3,buf,strlen(buf))) < 0 ){
     } 
 
 printf("exit\n");
-    
+sleep(10000);    
 close(fd3);
 return 0;
 }
