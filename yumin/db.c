@@ -14,7 +14,6 @@ int Read(void*, int, char**, char** );
 int main(void){
 	char* err_msg = 0;
 	sqlite3* db;
-	// scanf("%s",menu_name);
 	int rc = sqlite3_open("test.db", &db);
 	sqlite3_stmt* res;
 
@@ -31,19 +30,14 @@ int main(void){
 		sqlite3_close(db);
 		exit(1);
 	}
-	//CREATE TABLE
 	char *sql = "DROP TABLE IF EXISTS menu;"
-				"CREATE TABLE menu(id int primary key, name varchar(2),price int,available int, img text,);"
-				"insert into menu(name,price,img) values ('pizza','25000',1,'aaa');";
+		"CREATE TABLE menu(id int primary key, name varchar(2),price int,available int));""insert into menu(name,price,available) values ('pizza','25000',1);";
 	rc = sqlite3_exec(db,sql,0,0,&err_msg);
 
 	sql = "select * from menu;";
 
-	rc = sqlite3_exec(db,sql,Read,0,&err_msg)
-;	//read
+	rc = sqlite3_exec(db,sql,Read,0,&err_msg);
 
-	//close
-	// free(err_msg);
 	sqlite3_close(db);
 	return 0;
 
@@ -83,9 +77,6 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 	
 }
 
-// int Recp(void* NotUsed, int argc, char** argv, char** azColname){
 
 
-// 	return 0;
-// }
 
