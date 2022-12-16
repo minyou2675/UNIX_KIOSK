@@ -21,18 +21,18 @@ typedef struct {
 Data* dataArr[MAXDATA];
 int arrnum =0;
 
-
+//ipc 관련 선언들
   //////////////IPC AREA////////////////////////////
 char* pointingName; 
  struct mymsgbuf {
  long mtype;
- char mtext[BUFSIZ];
+ char mtext[10];
  };
 key_t key;
  int msgid;
  struct mymsgbuf mesg;
 
-
+//키오스크 메인화면 리스트 초기화
 void init_list(GtkWidget *list) {
 
   GtkCellRenderer *renderer;
@@ -53,11 +53,14 @@ void init_list(GtkWidget *list) {
   g_object_unref(store);
 }
 
+
+//리스트에 품목을 추가할수 있게 해주는 함수
 void add_to_list(GtkWidget *list, const gchar *str, Data* data ) {
     
   GtkListStore *store;
   GtkTreeIter iter;
   
+  //구조체의 주소는 따로보관하여 나중에 이름 및 가격의 참조를 용이하게 함
   dataArr[arrnum] = data;
   arrnum++;
   if(arrnum > MAXDATA)
@@ -72,12 +75,14 @@ void add_to_list(GtkWidget *list, const gchar *str, Data* data ) {
 
 }
 
+//리스트 항목을 한 번 클릭 했을 시 호출되는 함수
 void on_changed(GtkWidget *widget, gpointer label) {
     
   GtkTreeIter iter;
   GtkTreeModel *model;
   gchar* value;
   
+  //라벨의 내용을 품명으로 바꿔준다.
 
   if (gtk_tree_selection_get_selected(
       GTK_TREE_SELECTION(widget), &model, &iter)) {
@@ -88,11 +93,12 @@ void on_changed(GtkWidget *widget, gpointer label) {
   }
 }
 
+//주문 버튼으로 품목과 수량을 전달시켜주는 함수 - 메시지 큐 이용
 void press_order(GtkWidget *widget, GtkEntry* entry)
 {
-    char str[BUFSIZ] = "";
+    char str[10] = "";
 
-
+    //서버에서 데이터 언패킹이 용이하도록 규격을 맞춤
     g_print("\nOrder :::::::::: ");
 
     strcpy(str, pointingName);
@@ -100,15 +106,17 @@ void press_order(GtkWidget *widget, GtkEntry* entry)
     strcat(str, gtk_entry_get_text(entry));
     g_print("s %s  :: ", str);
 
+    //메시지 큐를 이용한 전송
 mesg.mtype = 1;
  strcpy(mesg.mtext, str);
 
- if (msgsnd(msgid, (void *)&mesg, BUFSIZ, IPC_NOWAIT) == -1) {
+ if (msgsnd(msgid, (void *)&mesg, 10, IPC_NOWAIT) == -1) {
  perror("msgsnd");
  exit(1);
  }
 }
 
+//리스트의 항목을 더블 클릭 시 주문 창을 띄워주는 함수
 void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
 {
     gchar *string;
@@ -126,10 +134,12 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
     GtkWidget *buttonX;
     GtkWidget *namelabel;
     GtkWidget *entry;
-
+    
+    //호출시 어떤 항목인지 출력
     g_print ("activated: %s\n", string);
     pointingName = string;
 
+    //삽입된 리스트에서 이름을 통해 실제 품목의 구조체를 추적
       for(int i = 0; i<arrnum; i++)
       {
       	if( strcmp(string, dataArr[i]->name) == 0 )
@@ -139,6 +149,8 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
         }else
         	data = NULL;
       }
+
+      //주문 창을 띄워주는 내용
       window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title(GTK_WINDOW(window), data->name);
       gtk_window_set_default_size(GTK_WINDOW(window),150,100);
@@ -147,12 +159,15 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
       grid = gtk_grid_new();
       gtk_container_add (GTK_CONTAINER(window), GTK_WIDGET(grid));
 
+      //품명과 가격을 표시해준다
       buf = g_strdup_printf("NAME : %s\nPRICE : %d\n", data->name, data->price);
       namelabel = gtk_label_new(buf);
       gtk_grid_attach (GTK_GRID(grid), namelabel, 0, 0, 1, 1);
       entry = gtk_entry_new();
       gtk_grid_attach(GTK_GRID(grid),entry, 1, 2, 1, 1);
 
+
+      //버튼 두 개를 주문, 취소로 나누어 부착시킴
       buttonO = gtk_button_new_with_label("Order");
       gtk_grid_attach(GTK_GRID(grid), buttonO, 0, 3, 1, 1);      
       buttonX = gtk_button_new_with_label("Cancel");
@@ -161,6 +176,7 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
 
 //        system("ps -l");
       
+      //각각의 버튼에 역할에 맞는 시그널(호출함수) 부여
       g_signal_connect(G_OBJECT(buttonX), "clicked", G_CALLBACK(gtk_window_close), (GtkWindow*) window);
     
       g_signal_connect(G_OBJECT(buttonO), "clicked", G_CALLBACK(press_order), (GtkEntry*) entry);
@@ -174,34 +190,21 @@ void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
 
 void refreshDataArray()
 {
-    int pd, n;
-    char inmsg[1024];
+    int len;
+    struct mymsgbuf inmsg;
 
-    char* p_token;
-    char* p_next_token;
+//    char* p_token;
+  //  char* p_next_token;
 
-    char* np_token;
-    char* np_next_token;
+    //char* np_token;
+   // char* np_next_token;
     
-    if((pd = open("./menu_pipe", O_RDONLY)) == -1)
-    {
-        perror("openfifoin");
-        exit(1);
-    }
-
-    n=read(pd, inmsg, 1024);
+    len = msgrcv(msgid, &inmsg, 10, 0, 0);
+    g_print("rcv = %s\n", inmsg.mtext, len);
     
     
-    if(n==-1)
-    {
-        perror("read");
-        exit(1);
-    }
-    close(pd);
-
-    g_print("%s\n", inmsg);
 /////////get data in format
-
+/*
     p_token = strtok_r(inmsg, "\n", &p_next_token);
     for(int i = 1; p_token != NULL; i++)
     {
@@ -212,8 +215,9 @@ void refreshDataArray()
             g_print("data%d : %s, %d", i, dataArr[i]->name, dataArr[i]->price);
         }
         p_token = strtok_r(NULL, "\n", &p_next_token);
-    }
+    }*/
 }
+
 
 
 int main(int argc, char *argv[]) {
@@ -225,13 +229,15 @@ int main(int argc, char *argv[]) {
   GtkWidget *vbox;
   GtkWidget *label;
   GtkTreeSelection *selection; 
-
+    
+  //임시 품목 설정
   Data pasta, pizza;
   pasta.name = "pasta";
   pasta.price = 123;
   pizza.name = "pizza";
   pizza.price = 456;
 
+  //메시지 큐 설정을 위한 키파일 생성
   key = ftok("keyfile", 1);
  msgid = msgget(key, IPC_CREAT|0644);
  if (msgid == -1) {
@@ -239,11 +245,13 @@ int main(int argc, char *argv[]) {
  exit(1);
  }
 
+ //gtk 시동 함수
   gtk_init(&argc, &argv);
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   list = gtk_tree_view_new();
 
+  //기본 창의 이름과 사이즈를 조정해준다.
   gtk_window_set_title(GTK_WINDOW(window), "Item List");
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
   gtk_container_set_border_width(GTK_CONTAINER(window), 15);
@@ -255,7 +263,7 @@ int main(int argc, char *argv[]) {
 
 
   label = gtk_label_new("");
-  
+  //스크롤 기능 추가
   sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                            GTK_SHADOW_ETCHED_IN);
@@ -264,10 +272,14 @@ int main(int argc, char *argv[]) {
                                       GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0); 
   
+
+    //생성한 콘텐츠들을 창에 붙여준다.
   gtk_container_add(GTK_CONTAINER(window), vbox);
   gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
   gtk_container_add(GTK_CONTAINER(sw), list);
 //////////////////
+//
+//리스트에 아이템 추가 과정(임시)
   init_list(list);
   add_to_list(list, pasta.name, &pasta);
   add_to_list(list, pizza.name, &pizza);
@@ -306,6 +318,8 @@ int main(int argc, char *argv[]) {
   add_to_list(list, pizza.name, &pizza);
  // add_to_list(list, pasta.name);
   
+
+  //품목 선택 관련 상호 작용을 관리하는 영역
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
 
 
