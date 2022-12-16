@@ -27,6 +27,7 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 		//printf("%s\n", argv[i] ? argv[i] : NULL);
 		fprintf(fd, argv[i]);
 		fprintf(fd," ");
+		printf("%s\n",argv[i]);
 		
 
 	}

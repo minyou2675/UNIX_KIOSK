@@ -10,8 +10,8 @@
 int main(){
         char buf[1024];
         
-        int fd1, fd2;
-	char* sql = "select price,name from menu;";
+        int fd1[2];
+	char* sql = "select name,price from menu;";
         char* err_msg = 0;
 	    sqlite3* db;
         
@@ -25,32 +25,46 @@ int main(){
 		sqlite3_close(db);
 		exit(1);
 		}
-        if(mkfifo("menu_pipe",0666) < 0){
-            perror("mkfifo");
-            exit(1);
-        }
+       // if(mkfifo("menu_pipe",0666) == -1){
+           // perror("mkfifo");
+         //   exit(1);
+       // }
         rc = sqlite3_exec(db,sql,Read,0,&err_msg);
+	puts("sql");
 
-        if((fd1 = open("menu.txt",O_RDONLY)) < 0){
+	if(pipe(fd1) == -1){
+		perror("pipe");
+		exit(1);
+	}
+	int fd2 = dup(fd1[0]);
+	int fd3 = dup(fd1[1]);
+
+        if((fd2  = open("menu.txt",O_RDONLY)) == -1){
             perror("open1");
             exit(1);
         }
-        if((read(fd1,buf,sizeof(buf))) < 0){
+	puts("menu.txt open");
+	puts("read fd1");
+        if((read(fd2,buf,sizeof(buf))) < 0){
             perror("read");
             exit(1);
         }
+	close(fd2);
+	puts("read fd2");
     
-        if((fd2 = open("menu_pipe",O_WRONLY|O_CREAT|O_TRUNC)) < 0){
+        if((fd3 = open("menu_pipe",O_WRONLY)) == -1){
             perror("open2");
             exit(1);
         }
-        if((write(fd2,buf,strlen(buf))) < 0 ){
+	puts("open menu_pipe");
+        if((write(fd3,buf,strlen(buf))) < 0 ){
             perror("read");
             exit(1);
         } 
-        puts(buf);
-        close(fd1);
-	close(fd2);
+
+	printf("exit\n");
+        
+	close(fd3);
 	return 0;
 
 }
