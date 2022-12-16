@@ -29,9 +29,10 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 
 
 
-int Receipt(sqlite3 *db,int num,char *text){
-
+int Receipt(int num,char *text){
+    sqlite3 *db;
     char *err_msg = 0; 
+    char* sql;
     sqlite3_stmt *res;
     int rc = sqlite3_open("menu.db",&db); 
     if (rc != SQLITE_OK)
@@ -58,7 +59,7 @@ int Receipt(sqlite3 *db,int num,char *text){
         return 1;
 
     }
-    rc = sqlite3_bind_text(res,1,text);
+    rc = sqlite3_bind_text(res,1,text,-1,SQLITE_STATIC);
     if( rc != SQLITE_OK){
         return 1;
     }
@@ -77,7 +78,7 @@ int Receipt(sqlite3 *db,int num,char *text){
     if(rc != SQLITE_OK){
         return 1;
     }
-    rc = sqlite3_bind_text(res, 1,text);
+    rc = sqlite3_bind_text(res, 1,text,-1,SQLITE_STATIC);
     if(rc != SQLITE_OK){
         return 1;
     }
