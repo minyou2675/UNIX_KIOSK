@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include  "db2.h"
 
-#define PORTNUM 9000
+#define PORTNUM 7000
 
 int main(){
         char buf[256];
