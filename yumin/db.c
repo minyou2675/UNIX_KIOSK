@@ -43,7 +43,7 @@ int main(void){
 ;	//read
 
 	//close
-	free(err_msg);
+	// free(err_msg);
 	sqlite3_close(db);
 	return 0;
 
@@ -53,7 +53,7 @@ int main(void){
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
 	int fd;
-	if((fd = open("test.db",O_WRONLY | O_CREAT | O_EXCL, 0644) < -1)){
+	if((fd = open("test",O_WRONLY | O_CREAT | O_EXCL, 0644) < -1)){
 		perror("fd");
 		exit(1);
 	}
