@@ -29,10 +29,11 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 
 
 
-int Receipt(int num,char *text){
+int Receipt(char* text, char *num_s){
     sqlite3 *db;
     char *err_msg = 0; 
     char* sql;
+    int num = atoi(&num_s);
     sqlite3_stmt *res;
     int rc = sqlite3_open("menu.db",&db); 
     if (rc != SQLITE_OK)

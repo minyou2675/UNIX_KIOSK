@@ -65,14 +65,21 @@ if((read(fd2,buf,sizeof(buf))) < 0){
     }
 
 strcpy(msg.buf,buf);
-if(msgsnd(message_queue_id, &msg, sizeof(msg), 0) == -1){
+if(msgsnd(message_queue_id, &msg, sizeof(msg.buf), 0) == -1){
     perror("msgsnd");
     exit(1);
 }
 close(fd2);
 
-
+if(msgrcv(message_queue_id, &msg, sizeof(msg.buf),0,0) == -1){
+	perror("msgrcv");
+	exit(1);
+}
+char* num;
+char* menu_name = strtok(msg.buf,",");
+num = strtok(NULL,",");
 printf("exit\n");
+Receipt(menu_name,num);
 sleep(10000);    
 close(fd3);
 return 0;
