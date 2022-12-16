@@ -12,12 +12,10 @@ int Read(void*, int, char**, char** );
 
 //gcc -o db db.c -lsqlite3 -std=c99
 int main(void){
-	int main(void)
-{
     sqlite3 *db;
     char *err_msg = 0;
     
-    int rc = sqlite3_open("test.db", &db);
+    int rc = sqlite3_open("menu.db", &db);
     
     if (rc != SQLITE_OK)
     {
@@ -48,22 +46,28 @@ int main(void){
         sqlite3_close(db);
         
         return 1;
-    } 
+    }
+
+   sql = "select name,price from menu;"; 
+
+    rc = sqlite3_exec(db,sql,Read,0,&err_msg);
+
+    if(rc != SQLITE_OK)
+    {
+	    perror("rc");
+	    sqlite3_free(err_msg);
+	    sqlite3_close(db);
+	    return 1;
+    }
     
     sqlite3_close(db);
     
     return 0;
 }
-}
 //search all data
 
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
-	// int fd;
-	// if((fd = open("test",O_WRONLY | O_CREAT | O_EXCL, 0644) < -1)){
-	// 	perror("fd");
-	// 	exit(1);
-	// }
 
 	NotUsed = 0;
     
