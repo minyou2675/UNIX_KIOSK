@@ -8,7 +8,6 @@
 
 // }
 
-
    
 //search all data
 
@@ -16,7 +15,6 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	FILE *fd;
 
 	NotUsed = 0;
-	char* buf[1024];
 	fd = fopen("menu.txt","a");
 	
 	//strcpy(buf,azColName[0]);
@@ -28,10 +26,12 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 	
 		//printf("%s\n", argv[i] ? argv[i] : NULL);
 		fprintf(fd, argv[i]);
-		fprintf(fd,",");
+		fprintf(fd," ");
 		
 
 	}
+	fprintf("\n");
+	fclose(fd);
 
 	return 0;
 
