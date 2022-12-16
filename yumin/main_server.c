@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include  "order.h"
+#include "order.h"
 #include <sys/msg.h>
 struct message{
     long type;
-    char buf[BUFSIZ];
+    char buf[10];
 
 };
 
