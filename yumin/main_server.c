@@ -18,7 +18,7 @@ int message_queue_id = 12345;
 
 
 int main(){
-    struct msg msg;
+    
 
 	char buf[1024];
         int fd1[2];
