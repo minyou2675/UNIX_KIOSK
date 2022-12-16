@@ -59,34 +59,22 @@ int main(void){
 
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
-	int fd;
-	if((fd = open("test",O_WRONLY | O_CREAT | O_EXCL, 0644) < -1)){
-		perror("fd");
-		exit(1);
-	}
+	// int fd;
+	// if((fd = open("test",O_WRONLY | O_CREAT | O_EXCL, 0644) < -1)){
+	// 	perror("fd");
+	// 	exit(1);
+	// }
 
 	NotUsed = 0;
-	char buf[1024] = "db \n";
-	for(int i = 0; i < 2; i++){
-		printf("columns %s \n",azColName[i]);
-		strcat(buf,azColName[i]);
-	}
-	strcat(buf,"\n");
-	
-	for (int i = 0; i < argc; i++)
-	{
-	
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : NULL);
-		strcat(buf, argv[i]);
-		
-
-	}
-	puts(buf);
-	write(fd, buf, sizeof(buf));
-	printf("\n"); 
-	close(fd);
-
-	return 0;
+    
+    for (int i = 0; i < argc; i++)
+    {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    
+    printf("\n");
+    
+    return 0;
 	
 }
 
