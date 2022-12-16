@@ -11,11 +11,12 @@ int main(){
         char buf[1024];
         
         int fd1, fd2;
+	char* sql = "select price,name from menu;";
         char* err_msg = 0;
 	    sqlite3* db;
         
 	    // scanf("%s",menu_name);
-	    int rc = sqlite3_open("test.db", &db);
+	    int rc = sqlite3_open("menu.db", &db);
 	 
 
 	    if (rc != SQLITE_OK)
@@ -30,16 +31,16 @@ int main(){
         }
         rc = sqlite3_exec(db,sql,Read,0,&err_msg);
 
-        if((fd1 = open(menu.txt,O_RDONLY)) < 0){
+        if((fd1 = open("menu.txt",O_RDONLY)) < 0){
             perror("open1");
             exit(1);
         }
-        if((read(fd,buf,sizeof(buf))) < 0){
+        if((read(fd1,buf,sizeof(buf))) < 0){
             perror("read");
             exit(1);
         }
     
-        if((fd2 = open(menu_pipe,O_WRONLY|O_CREAT|O_TRUNC)) < 0){
+        if((fd2 = open("menu_pipe",O_WRONLY|O_CREAT|O_TRUNC)) < 0){
             perror("open2");
             exit(1);
         }
@@ -48,6 +49,8 @@ int main(){
             exit(1);
         } 
         puts(buf);
-        close(fd);
+        close(fd1);
+	close(fd2);
+	return 0;
 
 }

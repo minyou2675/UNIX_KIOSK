@@ -30,7 +30,7 @@ int Read(void* NotUsed, int argc, char** argv, char** azColName)
 		
 
 	}
-	fprintf("\n");
+	fprintf(fd,"\n");
 	fclose(fd);
 
 	return 0;

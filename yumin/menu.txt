@@ -1,1 +1,16 @@
-juice,21600,noodle,41400,chicken,21000,salad,350000,cake,29000,hamburger,9000,pasta,57127,pizza,52642,
+52642 pizza 
+57127 pasta 
+9000 hamburger 
+29000 cake 
+350000 salad 
+21000 chicken 
+41400 noodle 
+21600 juice 
+52642 pizza 
+57127 pasta 
+9000 hamburger 
+29000 cake 
+350000 salad 
+21000 chicken 
+41400 noodle 
+21600 juice 
