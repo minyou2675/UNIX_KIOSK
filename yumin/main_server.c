@@ -11,17 +11,22 @@ struct message{
     long type;
     char buf[BUFSIZ];
 
-} msg;
+};
 
 
-int message_queue_id = 12345;
+int message_queue_id = msgget(12345, 0666 | IPC_CREAT);
+if(message_queue_id == -1){
+    perror("message queue id");
+    exit(1);
+}
 
 
 int main(){
-    
+    struct message msg;
+    msg.type = 1;
 
 	char buf[1024];
-        int fd1[2];
+    int fd1[2];
     char* sql = "select name,price from menu;";
     char* err_msg = 0;
     sqlite3* db;
