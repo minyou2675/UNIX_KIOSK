@@ -75,6 +75,7 @@ if(msgrcv(message_queue_id, &msg, sizeof(msg.buf),0,0) == -1){
 	perror("msgrcv");
 	exit(1);
 }
+printf("msg buf : %s \n",msg.buf);
 char* num;
 char* menu_name = strtok(msg.buf,",");
 num = strtok(NULL,",");
