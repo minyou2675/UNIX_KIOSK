@@ -47,7 +47,7 @@ int Receipt(int num,char *text){
      sql = "SELECT PRICE FROM MENU WHERE MENU.Name = ?";
     
  
-      if (rc2 != SQLITE_OK)
+      if (rc != SQLITE_OK)
     {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
@@ -66,7 +66,7 @@ int Receipt(int num,char *text){
 
     rc = sqlite3_step(res);
     int price = sqlite3_column_int(res,0);
-    int cost = num * price
+    int cost = num * price;
     if (rc != SQLITE_DONE){
 
         return 1;

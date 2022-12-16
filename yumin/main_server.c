@@ -25,7 +25,7 @@ int main(){
     struct message msg;
     msg.type = 1;
 	
-    char buf[1024];
+    char buf[BUFSIZ];
     int fd1[2];
     char* sql = "select name,price from menu;";
     char* err_msg = 0;
