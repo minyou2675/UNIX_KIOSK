@@ -8,7 +8,8 @@
 #include  "db2.h"
 
 int main(){
-       int fd1[2];
+	char buf[1024];
+        int fd1[2];
     char* sql = "select name,price from menu;";
     char* err_msg = 0;
     sqlite3* db;
@@ -23,12 +24,8 @@ int main(){
         sqlite3_close(db);
         exit(1);
         }
-   // if(mkfifo("menu_pipe",0666) == -1){
-       // perror("mkfifo");
-     //   exit(1);
-   // }
     rc = sqlite3_exec(db,sql,Read,0,&err_msg);
-puts("sql");
+	puts("sql");
 
 if(pipe(fd1) == -1){
         perror("pipe");
