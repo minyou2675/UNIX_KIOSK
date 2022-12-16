@@ -43,7 +43,7 @@ int main(){
         memset((char *)&sin, '\0', sizeof(sin));
         sin.sin_family = AF_INET;
         sin.sin_port = htons(PORTNUM);
-        sin.sin_addr.s_addr = inet_addr("10.0.2.255");
+        sin.sin_addr.s_addr = inet_addr("54.180.1.233");
 
         if(bind(sd, (struct sockaddr *)&sin, sizeof(sin))){
             perror("bind");
@@ -90,7 +90,7 @@ int main(){
         //  MENU(NAME) ON UPDATE CASCADE);
         
         free(err_msg);
-	    sqlite3_close(db);
+	sqlite3_close(db);
         close(ns);
         close(sd);
 
