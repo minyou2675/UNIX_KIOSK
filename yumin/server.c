@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include  "db2.h"
 
 #define PORTNUM 9000
@@ -15,7 +16,7 @@ int main(){
         
         struct sockaddr_in sin, cli;
         int sd, ns, clientlen = sizeof(cli);
-
+	int fd;
         char* err_msg = 0;
 	    sqlite3* db;
 	    // scanf("%s",menu_name);
@@ -56,8 +57,19 @@ int main(){
             exit(1);
         }
         else{
-               char* sql = "select * from menu where available = 1;";
-            	sqlite3_exec(db,sql,Read,0,&err_msg);
+                 char* sql = "select name,price from menu;";
+                 sqlite3_exec(db,sql,Read,0,&err_msg);
+		if((fd = open("menu.txt",O_RDONLY)) < 0){
+			perror("open");
+			exit(1);
+			
+		};
+
+       		 read(fd,buf,strlen(buf));
+		  if(send(ns, buf, strlen(buf) + 1, 0) == -1){
+           		 perror("send");
+            		 exit(1);
+        }
         //     //accept 할 시 read data 실행
          
         }
@@ -65,16 +77,9 @@ int main(){
         if((recv(ns,*buf,sizeof(buf),0))== -1){
             perror("receive");
             exit(1);
-        };
+        }
+       // sprintf(buf, "Your IP address is %s", inet_ntoa(cli.sin_addr));
         
-        sprintf(buf, "Your IP address is %s", inet_ntoa(cli.sin_addr));
-        if(send(ns, buf, strlen(buf) + 1, 0) == -1){
-            perror("send");
-            exit(1);
-        }
-        else{
-            break;
-        }
         }
         //buf에 있는 내용을 DB에 추가 + PRINTF 로 내역 띄우기
 

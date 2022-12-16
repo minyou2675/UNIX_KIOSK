@@ -1,0 +1,1 @@
+juice,21600,noodle,41400,chicken,21000,salad,350000,cake,29000,hamburger,9000,pasta,57127,pizza,52642,

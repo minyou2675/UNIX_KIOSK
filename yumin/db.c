@@ -69,27 +69,25 @@ int main(void){
 int Read(void* NotUsed, int argc, char** argv, char** azColName)
 {	
 
-	int fd;
+	FILE *fd;
 
 	NotUsed = 0;
-	char buf[1024];
-	for(int i = 0; i < 2; i++){
-		printf("columns %s \n",azColName[i]);
-		strcat(buf,azColName[i]);
-	}
-	strcat(buf,"\n");
+	char* buf[1024];
+	fd = fopen("menu.txt","a");
 	
+	//strcpy(buf,azColName[0]);
+	//strcat(buf, " ");
+	//strcat(buf,azColName[1]);
+	//strcat(buf,"\n");
 	for (int i = 0; i < argc; i++)
 	{
 	
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : NULL);
-		strcat(buf, argv[i]);
+		//printf("%s\n", argv[i] ? argv[i] : NULL);
+		fprintf(fd, argv[i]);
+		fprintf(fd,",");
 		
 
 	}
-	puts(buf);
-	printf("\n"); 
-	
 
 	return 0;
 
