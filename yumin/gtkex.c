@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/msg.h>
 
 #define MAXDATA 100
 
@@ -23,7 +24,14 @@ int arrnum =0;
 
   //////////////IPC AREA////////////////////////////
 char* pointingName; 
- 
+ struct mymsgbuf {
+ long mtype;
+ char mtext[BUFSIZ];
+ };
+key_t key;
+ int msgid;
+ struct mymsgbuf mesg;
+
 
 void init_list(GtkWidget *list) {
 
@@ -49,12 +57,12 @@ void add_to_list(GtkWidget *list, const gchar *str, Data* data ) {
     
   GtkListStore *store;
   GtkTreeIter iter;
-/*  
+  
   dataArr[arrnum] = data;
   arrnum++;
   if(arrnum > MAXDATA)
   	printf("add_to_list() : MAXDATA OVERFLOW");
-  */
+  
   store = GTK_LIST_STORE(gtk_tree_view_get_model
       (GTK_TREE_VIEW(list)));
 
@@ -84,16 +92,6 @@ void press_order(GtkWidget *widget, GtkEntry* entry)
 {
     char str[BUFSIZ] = "";
 
-    /*
-    ///////1. PIPE, CLIENT -> SERVER, send Order info
-    int pd, number;
-    if((pd = open("./FIFO", O_WRONLY)) == -1)
-    {
-        perror("open fifo");
-        exit(1);
-    }
-    /////////
-*/
 
     g_print("\nOrder :::::::::: ");
 
@@ -102,17 +100,13 @@ void press_order(GtkWidget *widget, GtkEntry* entry)
     strcat(str, gtk_entry_get_text(entry));
     g_print("s %s  :: ", str);
 
-    /////////
-  /* 
-    n = write(pd, str, strlen(str)+1);
-    if( n==-1 )
-    {
-        perror("write");
-        exit(1);
-    }
-    close(pd);
-*/
+mesg.mtype = 1;
+ strcpy(mesg.mtext, str);
 
+ if (msgsnd(msgid, (void *)&mesg, BUFSIZ, IPC_NOWAIT) == -1) {
+ perror("msgsnd");
+ exit(1);
+ }
 }
 
 void replace_tab(GtkTreeView *tree_view, GtkTreePath *path, gpointer user_data)
@@ -238,7 +232,12 @@ int main(int argc, char *argv[]) {
   pizza.name = "pizza";
   pizza.price = 456;
 
-  refreshDataArray();
+  key = ftok("keyfile", 1);
+ msgid = msgget(key, IPC_CREAT|0644);
+ if (msgid == -1) {
+ perror("msgget");
+ exit(1);
+ }
 
   gtk_init(&argc, &argv);
 
